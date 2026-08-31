@@ -1,3 +1,13 @@
+<!-- BEGIN:nextjs-agent-rules -->
+
+# This is NOT the Next.js you know
+
+This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
+
+This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
+
+<!-- END:nextjs-agent-rules -->
+
 # AGENTS.md
 
 ## 1. Project
@@ -163,12 +173,16 @@ Initial tools:
 - check_inventory
 - check_delivery
 - calculate_quote
-- get_customer_pricing
 - validate_policy
+- create_quote
 - negotiate_quote
 - request_approval
 - create_payment
 - get_payment_status
+
+get_customer_pricing is deferred to P1 (see IMPLEMENTATION_PLAN.md
+section 33, Implementation Priority) and is not part of the MVP
+tool set.
 
 Tools must:
 - Have clearly defined inputs/outputs
@@ -234,6 +248,10 @@ Do NOT build:
 - Generic AI chatbot
 - Full universal commerce protocol
 - Production-scale multi-merchant settlement in MVP
+- Real buyer authentication — the MVP uses a seeded demo buyer
+  selector/session (the buyer picks/is assigned one of the
+  synthetic seeded Buyer records, see DATABASE.md section 4).
+  Real authentication is deferred to a future phase.
 
 ---
 

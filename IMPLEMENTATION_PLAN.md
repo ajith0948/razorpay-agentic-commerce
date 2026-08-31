@@ -129,9 +129,9 @@ CREATED
 → QUOTED
 → NEGOTIATING
 → ACCEPTED
-→ PAYMENT_PENDING
-→ PAID
-→ CONFIRMED
+
+ACCEPTED is terminal for the RFQ. See DATABASE.md section 9 for
+the complete state list and rules.
 
 Failure states:
 
@@ -144,13 +144,16 @@ QUOTED
 NEGOTIATING
 → REJECTED
 
-PAYMENT_PENDING
-→ PAYMENT_FAILED
+Cancellation where applicable (before acceptance only):
 
-Cancellation where applicable:
-
-ACCEPTED
+CREATED / PROCESSING / QUOTED / NEGOTIATING
 → CANCELLED
+
+RFQ state is independent from Order/Payment state. Order and
+Payment each have their own state machines, defined in
+DATABASE.md sections 13-14; this phase and its validation apply
+equally to whichever of these state machines a given task is
+implementing.
 
 Tasks:
 

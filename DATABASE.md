@@ -243,9 +243,11 @@ CREATED
 → QUOTED
 → NEGOTIATING
 → ACCEPTED
-→ PAYMENT_PENDING
-→ PAID
-→ CONFIRMED
+
+ACCEPTED is a terminal state for the RFQ. Once a quote is
+accepted, the RFQ's job is done; the Order/Payment lifecycle
+(see sections 13-14) takes over financial execution
+independently.
 
 Possible failure/terminal states:
 
@@ -258,13 +260,22 @@ QUOTED
 NEGOTIATING
 → REJECTED
 
-PAYMENT_PENDING
-→ PAYMENT_FAILED
+Possible cancellation (before acceptance only):
 
-Possible cancellation:
-
-ACCEPTED
+CREATED / PROCESSING / QUOTED / NEGOTIATING
 → CANCELLED
+
+Full set of RFQ states:
+
+- CREATED
+- PROCESSING
+- QUOTED
+- NEGOTIATING
+- ACCEPTED
+- REJECTED
+- EXPIRED
+- CANCELLED
+- FAILED
 
 Rules:
 
@@ -272,6 +283,10 @@ Rules:
 - State changes must happen through backend logic.
 - The LLM cannot directly change RFQ state.
 - Important state changes create audit events.
+- RFQ state is independent from Order/Payment state. Once a
+  quote is accepted, the RFQ becomes ACCEPTED and the
+  Order/Payment lifecycle handles financial execution (see
+  section 14).
 
 ---
 
@@ -442,12 +457,18 @@ Fields:
 - buyer_id
 - rfq_id
 - quote_id
-- payment_id
 - total_amount
 - currency
 - status
 - created_at
 - updated_at
+
+An order does not store a payment_id. Payment.order_id is the
+only link between the two records. This is intentional: it
+avoids a circular foreign-key relationship and allows multiple
+payment attempts against the same order (for example, a retry
+after a failed payment). An order's authoritative payment is
+its most recent Payment row with status PAID.
 
 Order status:
 
@@ -467,6 +488,11 @@ CREATED
 → CANCELLED
 
 An order must reference the RFQ and accepted quote that produced it.
+
+Order state is independent from RFQ state (see section 9). The
+RFQ reaches its own terminal ACCEPTED state once a quote is
+accepted; this Order/Payment lifecycle then manages financial
+execution on its own.
 
 ---
 
@@ -523,7 +549,7 @@ actor_type may include:
 
 - BUYER
 - SELLER_AGENT
-- HUMAN
+- HUMAN_MERCHANT
 - SYSTEM
 - RAZORPAY
 
@@ -621,6 +647,11 @@ Order
 
 12. Razorpay IDs must be stored so external financial events can be
     linked to internal records.
+
+13. An order may have multiple payment attempts (for example, a
+    retry after a failed payment). Payment.order_id is the only
+    link between the two records; the order does not store a
+    payment_id.
 
 ---
 

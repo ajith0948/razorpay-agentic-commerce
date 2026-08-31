@@ -232,6 +232,12 @@ It is responsible for:
 
 The frontend must never directly perform privileged operations.
 
+MVP note: "Authentication/session handling" means a seeded demo
+buyer selector/session — the buyer picks/is assigned one of the
+synthetic seeded Buyer records (see DATABASE.md section 4). Real
+authentication is not part of the MVP and is deferred to a
+future phase (see AGENTS.md section 10, Out of Scope).
+
 ---
 
 # 6. AI Seller Agent
@@ -283,7 +289,6 @@ Initial tools:
 - get_product
 - check_inventory
 - check_delivery
-- get_customer_pricing
 - calculate_quote
 - validate_policy
 - create_quote
@@ -291,6 +296,10 @@ Initial tools:
 - request_approval
 - create_payment
 - get_payment_status
+
+get_customer_pricing is deferred to P1 (see IMPLEMENTATION_PLAN.md
+section 33, Implementation Priority) and is not part of the MVP
+tool set.
 
 Every tool must:
 
@@ -649,6 +658,11 @@ PAYMENT_FAILED
 The database controls state.
 
 The LLM cannot directly change order state.
+
+Order state is independent from RFQ state. The RFQ reaches its
+own terminal ACCEPTED state once a quote is accepted (see
+DATABASE.md section 9); the Order/Payment lifecycle then manages
+financial execution on its own.
 
 ---
 
