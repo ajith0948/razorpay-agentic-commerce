@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "test": "node --test lib/state-machine/transition-table.test.ts lib/state-machine/rfq.test.ts lib/state-machine/quote.test.ts lib/state-machine/payment.test.ts lib/state-machine/order.test.ts lib/state-machine/approval.test.ts lib/state-machine/agent-session.test.ts lib/runtime/state-runtime.test.ts lib/rfq/requirements-parser.test.ts lib/rfq/application.test.ts lib/quote/policy.test.ts lib/quote/application.test.ts app/api/rfqs/route.test.ts app/api/rfqs/rfq-id-route.test.ts app/api/quotes/route.test.ts app/api/quotes/quote-id-route.test.ts app/api/quotes/quote-accept-route.test.ts app/api/orders/route.test.ts app/api/orders/order-id-route.test.ts app/api/approvals/route.test.ts app/api/approvals/approval-approve-route.test.ts app/api/approvals/approval-reject-route.test.ts app/api/payments/route.test.ts app/api/payments/payment-id-route.test.ts lib/order/application.test.ts lib/payment/application.test.ts lib/policy/application.test.ts lib/approval/application.test.ts lib/agent/session.test.ts lib/agent/tools.test.ts lib/agent/tool-definitions.test.ts lib/agent/gemini-provider.test.ts lib/agent/orchestrator.test.ts app/api/agent/route.test.ts lib/ui/api-client.test.ts lib/ui/agent-conversation.test.ts lib/ui/purchase-progress.test.ts"
   },
   "dependencies": {
     "@base-ui/react": "^1.7.0",
@@ -19,7 +20,8 @@
     "react-dom": "19.2.8",
     "shadcn": "^4.19.1",
     "tailwind-merge": "^3.6.0",
-    "tw-animate-css": "^1.4.0"
+    "tw-animate-css": "^1.4.0",
+    "zod": "^4.5.4"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",

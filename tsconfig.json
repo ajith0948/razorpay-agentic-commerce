@@ -11,6 +11,22 @@
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
+    // Required so lib/state-machine/*.ts can import sibling files with an
+    // explicit ".ts" extension (e.g. "./errors.ts"). That extension is not
+    // stylistic: Node's native TypeScript execution (used to run this
+    // module's *.test.ts files directly via `node --test`, with zero new
+    // devDependencies) resolves relative ESM specifiers exactly like
+    // Node's module loader always has -- no extension, no match -- and
+    // does not remap a ".js" specifier to a same-named ".ts" file the way
+    // tsc itself does when authoring. An explicit ".ts" extension is the
+    // one specifier form both Node's loader and tsc can resolve at once,
+    // and this flag is what lets tsc accept it. Requires noEmit or
+    // emitDeclarationOnly (this project already sets noEmit, since
+    // Next.js's own SWC-based build -- not tsc -- does the real
+    // transpilation; tsc only ever runs here in --noEmit typecheck mode),
+    // and does not change resolution for any existing extensionless
+    // import elsewhere in the project.
+    "allowImportingTsExtensions": true,
     "jsx": "react-jsx",
     "incremental": true,
     "plugins": [
